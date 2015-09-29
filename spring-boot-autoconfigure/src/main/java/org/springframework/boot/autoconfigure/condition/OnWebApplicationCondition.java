@@ -60,7 +60,10 @@ class OnWebApplicationCondition extends SpringBootCondition {
 
 	private ConditionOutcome isWebApplication(ConditionContext context,
 			AnnotatedTypeMetadata metadata) {
-
+		Boolean webEnvProperty = context.getEnvironment().getProperty("spring.main.web-environment", Boolean.class);
+        	if (webEnvProperty != null && webEnvProperty.equals(Boolean.FALSE))
+            		return ConditionOutcome.noMatch("not a web application");
+        
 		if (!ClassUtils.isPresent(WEB_CONTEXT_CLASS, context.getClassLoader())) {
 			return ConditionOutcome.noMatch("web application classes not found");
 		}
